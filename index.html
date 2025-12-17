@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Générateur de Points - Multiligne</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      gap: 30px;
+      margin: 30px;
+      background: #f4f4f9;
+      color: #333;
+    }
+
+    .controls {
+      width: 360px;
+      background: #fff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: fit-content;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      margin: 0 0 10px 0;
+      font-size: 13px;
+      text-transform: uppercase;
+      color: #888;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    /* Textarea stylisé */
+    textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      resize: vertical;
+      font-family: monospace;
+      font-size: 14px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    textarea:focus {
+      outline: 2px solid #007acc;
+      border-color: transparent;
+    }
+
+    /* Contrôles d'alignement */
+    .align-controls {
+      display: flex;
+      background: #f0f0f0;
+      border-radius: 8px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 15px;
+    }
+
+    .align-option {
+      flex: 1;
+    }
+
+    .align-option input {
+      display: none;
+    }
+
+    .align-option label {
+      display: block;
+      text-align: center;
+      padding: 6px;
+      margin: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      background: transparent;
+      transition: background 0.2s;
+    }
+
+    .align-option input:checked+label {
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      color: #007acc;
+    }
+
+    /* Steppers */
+    .stepper-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #f5f5f5;
+      padding: 3px;
+      border-radius: 6px;
+    }
+
+    .stepper button {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #555;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .stepper button:hover {
+      background: #fafafa;
+      color: #000;
+    }
+
+    .stepper span {
+      font-weight: bold;
+      min-width: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* Zone Export */
+    .export-zone {
+      margin-top: 10px;
+      padding-top: 20px;
+      border-top: 2px dashed #eee;
+    }
+
+    .val-display {
+      float: right;
+      color: #007acc;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    button#export {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background: #007acc;
+      color: white;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.2s;
+    }
+
+    button#export:hover {
+      background: #005fa3;
+    }
+
+    .preview {
+      flex: 1;
+      background: #e0e0e0;
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      overflow: hidden;
+      min-height: 400px;
+    }
+
+    svg {
+      background: #111;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      max-width: 100%;
+      max-height: 85vh;
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="controls">
+
+    <div>
+      <h3>Contenu</h3>
+      <textarea id="text" placeholder="FTSHIRT"></textarea>
+
+      <div class="align-controls">
+        <div class="align-option">
+          <input type="radio" name="align" id="align-left" value="left">
+          <label for="align-left">Gauche</label>
+        </div>
+        <div class="align-option">
+          <input type="radio" name="align" id="align-center" value="center" checked>
+          <label for="align-center">Centre</label>
+        </div>
+        <div class="align-option">
+          <input type="radio" name="align" id="align-right" value="right">
+          <label for="align-right">Droite</label>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3>Marges & Espacement</h3>
+      <div class="stepper-row">
+        <label>Marge Horizontale</label>
+        <div class="stepper">
+          <button id="padX-minus">-</button>
+          <span id="padX-val">2</span>
+          <button id="padX-plus">+</button>
+        </div>
+      </div>
+
+      <div class="stepper-row">
+        <label>Marge Verticale</label>
+        <div class="stepper">
+          <button id="padY-minus">-</button>
+          <span id="padY-val">2</span>
+          <button id="padY-plus">+</button>
+        </div>
+      </div>
+
+      <div class="stepper-row">
+        <label>Interligne</label>
+        <div class="stepper">
+          <button id="lineSpace-minus">-</button>
+          <span id="lineSpace-val">2</span>
+          <button id="lineSpace-plus">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3>Style</h3>
+      <label>Taille des points
+        <span class="val-display" id="dotScaleVal">60%</span>
+      </label>
+      <input id="dotScale" type="range" min="10" max="95" step="5" value="60" />
+    </div>
+
+    <div class="export-zone">
+      <h3>Export</h3>
+
+      <label>Largeur Physique
+        <span class="val-display" id="exportWidthVal">20 cm</span>
+      </label>
+      <input id="exportWidth" type="range" min="5" max="100" step="1" value="20" />
+
+      <div style="font-size: 12px; color: #666; margin-top: 8px; text-align: center;">
+        Hauteur finale : <strong id="calcHeight">--</strong>
+      </div>
+
+      <button id="export">Télécharger SVG</button>
+    </div>
+
+  </div>
+
+  <div class="preview">
+    <svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+
+</html>
